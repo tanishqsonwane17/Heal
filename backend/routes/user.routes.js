@@ -1,0 +1,20 @@
+import express from 'express';
+import {  registerController } from '../controller/user.controller.js';
+import { body } from 'express-validator';
+
+const router = express.Router();
+
+router.post( '/register',
+  [
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
+    body('age').isNumeric().withMessage('Age must be a number'),
+    body('height').isNumeric().withMessage('Height must be a number'),
+    body('weight').isNumeric().withMessage('Weight must be a number'),
+    body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean')
+  ],
+  registerController
+);
+
+export default router;
