@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 
 export const isAuthenticated = (req, res, next) => {
-  const authHeader = req.headers["authorization"]; // get header
+  const authHeader = req.headers["authorization"]; 
   if (!authHeader) {
     return res.status(401).json({ error: "No token provided" });
   }
 
-  const token = authHeader.split(" ")[1]; // "Bearer <token>"
+  const token = authHeader.split(" ")[1]; 
 
   if (!token) {
     return res.status(401).json({ error: "Invalid token format" });
@@ -14,9 +14,9 @@ export const isAuthenticated = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // user id available as req.user.id
+    req.user = decoded; 
     next();
   } catch (err) {
-    return res.status(401).json({ error: "Token invalid or expired" });
+    return res.status(401).json({error: "Token invalid or expired" });
   }
 };

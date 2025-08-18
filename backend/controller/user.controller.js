@@ -48,7 +48,18 @@ export const loginController = async (req, res) => {
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     res.cookie("jwt", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-    res.status(200).json({ user, token });
+    res.status(200).json(
+{
+    username:user.username,
+    email:user.email,
+    age:user.age,
+    isAdmin:user.isAdmin,
+    height:user.height,
+    weight:user.weight,
+    gender:user.gender,
+    token
+}
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
