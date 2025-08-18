@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 export const registerController = async (req, res) => {
   try {
     const errors = validationResult(req);

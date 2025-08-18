@@ -1,6 +1,7 @@
 import express from 'express';
 import {  loginController, registerController } from '../controller/user.controller.js';
 import { body } from 'express-validator';
+import { isAuthenticated } from '../auth/user.auth.js';
 
 const router = express.Router();
 
@@ -18,4 +19,9 @@ router.post( '/register',
 );
 
 router.post('/login', loginController);
+router.get('/home',isAuthenticated,(req,res)=>{
+  res.send('home');
+  console.log('user is authenticated');
+})
 export default router;
+
