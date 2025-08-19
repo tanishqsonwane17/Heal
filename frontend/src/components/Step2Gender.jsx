@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import { UserContext } from "../context/UserContext";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import Nav from "./Nav";
 const Step2Gender = () => {
   const { register, watch, setValue } = useFormContext();
   const { nextStep, prevStep } = useContext(UserContext);
@@ -11,6 +12,8 @@ const Step2Gender = () => {
   const options = ["Male", "Female", "Other"];
 
   return (
+    <>
+    <Nav/>
     <div className="w-full bg-[linear-gradient(to_right,_##fde1e198_10%,_white_99%)] px-4 mt-2 flex flex-col items-center justify-between  ">
       <div>
       <div className=" w-full flex justify-center ">
@@ -19,7 +22,7 @@ const Step2Gender = () => {
         </h1>
       </div>
       <div className="flex flex-col gap-60 h-full">
-      <div className=" flex flex-col gap-4 mt-10  items-center w-full">
+      <div className=" flex flex-col gap-4 mt-10 items-center w-full">
         {options.map((gender) => (
           <div
           key={gender}
@@ -51,6 +54,7 @@ const Step2Gender = () => {
       </div>
       </div>
     </div>
+    </>
   );
 };
 
