@@ -1,6 +1,8 @@
+"use client";
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { baseUrl } from '../../config/Axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,7 +10,7 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: async () => {
-      const res = await axios.post('http://localhost:3000/user/login', {
+      const res = await axios.post(`${baseUrl}/user/login`, {
         email,
         password
       });
@@ -16,30 +18,35 @@ const Login = () => {
     }
   });
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
     loginMutation.mutate();
   };
 
   return (
     <div>
       <h1>Login</h1>
-      <input 
-        type="email" 
-        placeholder="Email" 
-        value={email} 
-        onChange={e => setEmail(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Password" 
-        value={password} 
-        onChange={e => setPassword(e.target.value)} 
-      />
-      <button onClick={handleLogin}>Login</button>
+      <form onSubmit={handleLogin}>
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={e => setEmail(e.target.value)}
+          autoComplete="username"
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={e => setPassword(e.target.value)} 
+          autoComplete="current-password"
+        />
+        <button type="submit">Login</button>
 
-      {loginMutation.isLoading && <p>Loading...</p>}
-      {loginMutation.isError && <p>Error: {loginMutation.error.message}</p>}
-      {loginMutation.data && <p>success:{loginMutation.data.username}</p>}
+        {loginMutation.isLoading && <p>Loading...</p>}
+        {loginMutation.isError && <p>Error: {loginMutation.error.message}</p>}
+        {loginMutation.data && <p>Success! Welcome {loginMutation.data.username}</p>}
+      </form>
     </div>
   );
 };
