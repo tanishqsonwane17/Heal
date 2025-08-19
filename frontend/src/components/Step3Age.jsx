@@ -78,7 +78,7 @@ const Step3Age = () => {
           {currentAge}
         </div>
         <button
-          className={`mt-36 py-3 w-full rounded-3xl tracking-wider font-semibold flex items-center justify-center
+          className={`mt-46 py-3 w-full rounded-3xl tracking-wider font-semibold flex items-center justify-center
             ${currentAge ? "bg-[#4F3422] text-white" : "bg-gray-400 cursor-not-allowed"}`}
           type="button"
           onClick={handleNext}

@@ -4,8 +4,8 @@ import { UserContext } from "../context/UserContext";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import Nav from "./Nav";
 const Step2Gender = () => {
-  const { register, watch, setValue } = useFormContext();
-  const { nextStep, prevStep } = useContext(UserContext);
+  const {  watch, setValue } = useFormContext();
+  const { nextStep, } = useContext(UserContext);
 
   const selectedGender = watch("gender"); // current selected value
 
