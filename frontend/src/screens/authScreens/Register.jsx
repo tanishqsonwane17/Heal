@@ -1,12 +1,11 @@
 // Register.jsx
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../App.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { UserContext } from "../../context/UserContext";
-
 import Step1User from "../../components/Step1User";
 import Step2Gender from "../../components/Step2Gender";
 import Step3Age from "../../components/Step3Age";
@@ -14,7 +13,7 @@ import Step4Height from "../../components/Step4Height";
 import Step5Weight from "../../components/Step5Weight";
 import { baseUrl } from "../../config/Axios";
 
-// map steps
+// Map steps
 const stepComponents = {
   1: Step1User,
   2: Step2Gender,
@@ -25,6 +24,19 @@ const stepComponents = {
 
 const Register = () => {
   const { step } = useContext(UserContext);
+
+  // ✅ Correctly track step & direction
+  const [currentStep, setCurrentStep] = useState(step);
+  const [direction, setDirection] = useState(0);
+
+  useEffect(() => {
+    if (step !== currentStep) {
+      setDirection(step > currentStep ? 1 : -1);
+      setCurrentStep(step);
+    }
+  }, [step]);
+
+  // React Hook Form setup
   const methods = useForm({
     defaultValues: {
       username: "",
@@ -37,47 +49,50 @@ const Register = () => {
     },
   });
 
-const registerMutation = useMutation({
-  mutationFn: async (data) => {
-    // ✅ yahan axios call me headers add karo
-    const res = await axios.post(`${baseUrl}/user/register`, data, {
-      headers: { "Content-Type": "application/json" }
-    });
-    return res.data;
-  },
-});
-const onSubmit = (data) => {
-  const payload = {
-    username: data.username || "",
-    email: data.email || "",
-    password: data.password || "",
-    gender: data.gender || "",                
-    age: Number(data.age) || 0,               
-    height: Number(data.height) || 0,         
-    weight: Number(data.weight) || 0          
+  // Register API call
+  const registerMutation = useMutation({
+    mutationFn: async (data) => {
+      const res = await axios.post(`${baseUrl}/user/register`, data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return res.data;
+    },
+  });
+
+  const onSubmit = (data) => {
+    const payload = {
+      username: data.username || "",
+      email: data.email || "",
+      password: data.password || "",
+      gender: data.gender || "",
+      age: Number(data.age) || 0,
+      height: Number(data.height) || 0,
+      weight: Number(data.weight) || 0,
+    };
+
+    console.log("Submitting payload 👉", payload);
+    registerMutation.mutate(payload);
   };
 
-  console.log("Submitting payload 👉", payload);
-  registerMutation.mutate(payload);
-};
   const CurrentStep = stepComponents[step];
+
   return (
     <div className="register-container max-w-md mx-auto">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <AnimatePresence mode="wait">
             <motion.div
-              key={step}
-              initial={{ x: 300, opacity: 0 }}
+              key={currentStep}
+              initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -300, opacity: 0 }}
+              exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
               <CurrentStep />
               {step === 5 && (
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+                  className="py-3 w-[90%] mx-4 rounded-3xl tracking-wider font-semibold flex bg-[#4F3422] text-white items-center justify-center"
                 >
                   Register
                 </button>
@@ -86,6 +101,8 @@ const onSubmit = (data) => {
           </AnimatePresence>
         </form>
       </FormProvider>
+
+      {/* Feedback */}
       {registerMutation.isLoading && <p>Loading...</p>}
       {registerMutation.isError && (
         <p className="text-red-500">Error: {registerMutation.error.message}</p>
@@ -98,4 +115,5 @@ const onSubmit = (data) => {
     </div>
   );
 };
+
 export default Register;
