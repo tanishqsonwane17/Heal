@@ -13,7 +13,6 @@ router.post( '/register',
     body('age').isNumeric().withMessage('Age must be a number'),
     body('height').isNumeric().withMessage('Height must be a number'),
     body('weight').isNumeric().withMessage('Weight must be a number'),
-    body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean')
   ],
   registerController
 );

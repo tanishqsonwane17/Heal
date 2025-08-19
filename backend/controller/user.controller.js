@@ -53,7 +53,6 @@ export const loginController = async (req, res) => {
     username:user.username,
     email:user.email,
     age:user.age,
-    isAdmin:user.isAdmin,
     height:user.height,
     weight:user.weight,
     gender:user.gender,

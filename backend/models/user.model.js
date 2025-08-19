@@ -18,10 +18,6 @@ const userScheam = new mongoose.Schema({
        type: Number,
        required: true
    },
-   isAdmin:{
-       type: Boolean,
-       default: false
-   },
    height:{
        type: Number,
        required: true
