@@ -8,36 +8,39 @@ const Step1User = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Step 1: User Info</h2>
-
-      <input
+     <div className="h-screen px-8 w-full">
+      <div className="flex flex-col gap-8 justify-center h-[50%] w-full">
+        <h1 className="text-center text-3xl font-semibold capitalize">Enter your valid details</h1>
+       <form action="">
+       <input
         type="text"
         placeholder="Username"
         {...register("username", { required: true })}
-        className="border p-2 rounded w-full mb-4"
+        className="border rounded-3xl px-3 p-2 w-full mb-4"
       />
-
       <input
         type="email"
         placeholder="Email"
         {...register("email", { required: true })}
-        className="border p-2 rounded w-full mb-4"
+        className="border rounded-3xl px-3 p-2 w-full mb-4"
       />
 
       <input
         type="password"
         placeholder="Password"
         {...register("password", { required: true })}
-        className="border p-2 rounded w-full mb-4"
+        className="border rounded-3xl px-3 p-2 w-full mb-4"
       />
-
-      <button
-        type="button"
-        onClick={nextStep} // step context ka nextStep
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Next
-      </button>
+      </form>
+       <button
+           type="button"
+           onClick={nextStep}
+           className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#9DB16B] w-[90%] text-white px-4 py-3 rounded-3xl shadow-lg">
+           Next
+         </button>
+      </div>
+     </div>
+      
     </div>
   );
 };

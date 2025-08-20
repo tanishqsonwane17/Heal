@@ -51,7 +51,7 @@ const registerMutation = useMutation({
     const res = await axios.post(`${baseUrl}/user/register`, data, {
       headers: { "Content-Type": "application/json" },
     });
-    return res.data; // ⬅️ sirf data return karo
+    return res.data; 
   },
 onSuccess: (data) => {
   if (data && data.user) {
