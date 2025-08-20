@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { baseUrl } from "../../config/Axios";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -69,8 +69,7 @@ const Login = () => {
             transition={{ duration: 0.5 }}
             autoComplete="current-password"
           />
-
-      
+          <Link className="text-xs">dont have an account? <Link to={"/auth/register"} className="text-[#6e7d48] underline">Register</Link> </Link>
         </form>
             <motion.button
             type="submit"

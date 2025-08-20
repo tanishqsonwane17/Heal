@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import { UserContext } from "../context/UserContext";
+import { Link } from "react-router";
 
 const Step1User = () => {
   const { register } = useFormContext();
@@ -31,6 +32,7 @@ const Step1User = () => {
         {...register("password", { required: true })}
         className="border rounded-3xl px-3 p-2 w-full mb-4"
       />
+      <p className="text-xs">Already have an account? <Link to={"/auth/login"} className="text-[#6e7d48] underline">Login</Link> </p>
       </form>
        <button
            type="button"
