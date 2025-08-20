@@ -7,33 +7,74 @@ import jwt from "jsonwebtoken";
 export const registerController = async (req, res) => {
   try {
     const errors = validationResult(req);
+    console.log("Incoming body:", req.body);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, email, password, age, isAdmin, height, weight, gender } = req.body;
+    let { username, email, password, age, isAdmin, height, weight, gender } = req.body;
+
+    // === Manual Validations ===
+    if (!username || username.trim() === "") {
+      return res.status(400).json({ error: "Username is required" });
+    }
+
+    if (!email || email.trim() === "") {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    if (!password || password.trim() === "") {
+      return res.status(400).json({ error: "Password is required" });
+    }
+
+    if (!gender || gender.trim() === "") {
+      return res.status(400).json({ error: "Gender is required" });
+    }
+
+    gender = gender.toLowerCase();
+
+    if (!age || isNaN(age) || age <= 0) {
+      return res.status(400).json({ error: "Valid age is required" });
+    }
+
+    if (!height || isNaN(height) || height <= 0) {
+      return res.status(400).json({ error: "Valid height is required" });
+    }
+
+    if (!weight || isNaN(weight) || weight <= 0) {
+      return res.status(400).json({ error: "Valid weight is required" });
+    }
+
+    // === Hash password ===
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // === Save user ===
     const user = await userModel.create({
-      username,
-      email,
+      username: username.trim(),
+      email: email.trim(),
       password: hashedPassword,
-      age,
-      isAdmin,
-      height,
-      weight,
+      age: Number(age),
+      isAdmin: isAdmin || false,
+      height: Number(height),
+      weight: Number(weight),
       gender,
     });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    // === Generate JWT token ===
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
     res.cookie("jwt", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
 
     res.status(201).json({ user, token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Register Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
+
 
 export const loginController = async (req, res) => {
   try {

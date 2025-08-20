@@ -7,7 +7,7 @@ const Step2Gender = () => {
   const {  watch, setValue } = useFormContext();
   const { nextStep, } = useContext(UserContext);
 
-  const selectedGender = watch("gender"); // current selected value
+  const selectedGender = watch("gender"); 
 
   const options = ["Male", "Female", "Other"];
 
@@ -46,8 +46,7 @@ const Step2Gender = () => {
         className={`mb-10 text-white py-3 w-full rounded-3xl tracking-wider font-semibold ${selectedGender ? "bg-[#4F3422]" : "bg-gray-400 cursor-not-allowed"}`}
         type="button"
         onClick={nextStep}
-        disabled={!selectedGender}
-      >
+        disabled={!selectedGender}>
         Continue <IoIosArrowRoundForward className="text-4xl inline" />
       </button>
       </div>

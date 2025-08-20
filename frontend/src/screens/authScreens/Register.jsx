@@ -12,8 +12,7 @@ import Step3Age from "../../components/Step3Age";
 import Step4Height from "../../components/Step4Height";
 import Step5Weight from "../../components/Step5Weight";
 import { baseUrl } from "../../config/Axios";
-
-// Map steps
+import { useNavigate } from "react-router";
 const stepComponents = {
   1: Step1User,
   2: Step2Gender,
@@ -24,11 +23,9 @@ const stepComponents = {
 
 const Register = () => {
   const { step } = useContext(UserContext);
-
-  // ✅ Correctly track step & direction
   const [currentStep, setCurrentStep] = useState(step);
   const [direction, setDirection] = useState(0);
-
+  const navigate = useNavigate()
   useEffect(() => {
     if (step !== currentStep) {
       setDirection(step > currentStep ? 1 : -1);
@@ -36,7 +33,6 @@ const Register = () => {
     }
   }, [step]);
 
-  // React Hook Form setup
   const methods = useForm({
     defaultValues: {
       username: "",
@@ -49,16 +45,25 @@ const Register = () => {
     },
   });
 
-  // Register API call
-  const registerMutation = useMutation({
-    mutationFn: async (data) => {
-      const res = await axios.post(`${baseUrl}/user/register`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      return res.data;
-    },
-  });
-
+const registerMutation = useMutation({
+  mutationKey: ["register"],
+  mutationFn: async (data) => {
+    const res = await axios.post(`${baseUrl}/user/register`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data; // ⬅️ sirf data return karo
+  },
+onSuccess: (data) => {
+  if (data && data.user) {
+    console.log("Registered successfully ", data);
+    navigate("/home");
+  }
+}
+,
+  onError: (error) => {
+    console.error("Registration failed", error);
+  },
+});
   const onSubmit = (data) => {
     const payload = {
       username: data.username || "",
@@ -70,7 +75,7 @@ const Register = () => {
       weight: Number(data.weight) || 0,
     };
 
-    console.log("Submitting payload 👉", payload);
+    console.log("Submitting payload ", payload);
     registerMutation.mutate(payload);
   };
 
@@ -102,7 +107,6 @@ const Register = () => {
         </form>
       </FormProvider>
 
-      {/* Feedback */}
       {registerMutation.isLoading && <p>Loading...</p>}
       {registerMutation.isError && (
         <p className="text-red-500">Error: {registerMutation.error.message}</p>

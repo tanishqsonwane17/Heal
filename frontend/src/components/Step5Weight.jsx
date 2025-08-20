@@ -15,7 +15,14 @@ const Step5Weight = () => {
   // Weight range from 30kg to 200kg
   const weights = Array.from({ length: 171 }, (_, i) => 30 + i);
 
-  const [currentWeight, setCurrentWeight] = useState(watch("weight") || defaultWeight);
+const [currentWeight, setCurrentWeight] = useState(watch("weight") || defaultWeight);
+
+useEffect(() => {
+  if (!watch("weight")) {
+    setValue("weight", defaultWeight);
+  }
+}, [setValue, watch]);
+
 
   const handleScroll = () => {
     const scrollLeft = scrollRef.current.scrollLeft;
