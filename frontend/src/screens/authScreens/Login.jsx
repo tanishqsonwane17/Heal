@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { baseUrl } from "../../config/Axios";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router"; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,15 +39,15 @@ const Login = () => {
 
   return (
     <div className="login-container h-screen flex flex-col justify-around mt-10 items-center px-6">
-     
       <FormProvider {...methods}>
-        <form
+        <form id="registerForm"
           onSubmit={methods.handleSubmit(onSubmit)}
           className="w-full max-w-md flex flex-col gap-4"
         >
-       <div>
-        <h1 className="text-center text-3xl font-semibold mb-4">Login</h1>
-      </div>
+          <div>
+            <h1 className="text-center text-3xl font-semibold mb-4">Login</h1>
+          </div>
+
           <motion.input
             type="email"
             placeholder="Email"
@@ -69,10 +69,21 @@ const Login = () => {
             transition={{ duration: 0.5 }}
             autoComplete="current-password"
           />
-          <Link className="text-xs">dont have an account? <Link to={"/auth/register"} className="text-[#6e7d48] underline">Register</Link> </Link>
+
+          {/* ✅ Fix link nesting */}
+          <p className="text-xs">
+            Don’t have an account?{" "}
+            <Link to="/auth/register" className="text-[#6e7d48] underline">
+              Register
+            </Link>
+          </p>
+
+          {/* ✅ Button form ke andar hi rakha */}
+         
         </form>
-            <motion.button
+         <motion.button
             type="submit"
+            form="registerForm" 
             className="py-3 w-full rounded-3xl tracking-wider font-semibold flex bg-[#9DB16B] text-white items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
