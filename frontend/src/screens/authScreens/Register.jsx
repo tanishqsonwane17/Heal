@@ -54,12 +54,14 @@ const registerMutation = useMutation({
     return res.data; 
   },
 onSuccess: (data) => {
-  if (data && data.user) {
+  if (data && data.user && data.token) {
     console.log("Registered successfully ", data);
+
+    localStorage.setItem("token", data.token);
+
     navigate("/home");
   }
-}
-,
+},
   onError: (error) => {
     console.error("Registration failed", error);
   },

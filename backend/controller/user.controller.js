@@ -12,44 +12,30 @@ export const registerController = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     let { username, email, password, age, isAdmin, height, weight, gender } = req.body;
-
-    // === Manual Validations ===
     if (!username || username.trim() === "") {
       return res.status(400).json({ error: "Username is required" });
     }
-
     if (!email || email.trim() === "") {
       return res.status(400).json({ error: "Email is required" });
     }
-
     if (!password || password.trim() === "") {
       return res.status(400).json({ error: "Password is required" });
     }
-
     if (!gender || gender.trim() === "") {
       return res.status(400).json({ error: "Gender is required" });
     }
-
     gender = gender.toLowerCase();
-
     if (!age || isNaN(age) || age <= 0) {
       return res.status(400).json({ error: "Valid age is required" });
     }
-
     if (!height || isNaN(height) || height <= 0) {
       return res.status(400).json({ error: "Valid height is required" });
     }
-
     if (!weight || isNaN(weight) || weight <= 0) {
       return res.status(400).json({ error: "Valid weight is required" });
     }
-
-    // === Hash password ===
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // === Save user ===
     const user = await userModel.create({
       username: username.trim(),
       email: email.trim(),
@@ -60,22 +46,16 @@ export const registerController = async (req, res) => {
       weight: Number(weight),
       gender,
     });
+const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+  expiresIn: "1d",
+});
+res.status(201).json({ user, token });
 
-    // === Generate JWT token ===
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-
-    res.status(201).json({ user, token });
   } catch (error) {
     console.error("Register Error:", error.message);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
-
-
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -104,3 +84,12 @@ export const loginController = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const logoutController = async(req,res)=>{
+  try {
+    res.clearCookie("jwt");
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
