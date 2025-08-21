@@ -1,10 +1,10 @@
-// AppRouter.jsx
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Layout from "../components/Layout";
 import Login from "../screens/authScreens/Login";
 import Register from "../screens/authScreens/Register";
 import Home from "../screens/Home";
 import ProtectedRoute from "../auth/ProtectedRoute";
+import Logout from "../screens/authScreens/Logout";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path:'logout',
+        element:<Logout/>
+      }
     ],
   },
   {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { baseUrl } from "../config/Axios";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -7,7 +8,7 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem("token"); // ya jaha tu token save kar raha hai
 
-    fetch("http://localhost:3000/auth/check", {
+    fetch(`${baseUrl}/auth/check`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`, // token bhejna hoga
@@ -36,7 +37,11 @@ const Home = () => {
   return (
     <div>
       {user ? (
-        <h1>Welcome {user.username}</h1>
+        <>
+        <div>
+          
+        </div>
+        </>
       ) : (
         <h1>You are not authenticated</h1>
       )}
