@@ -56,6 +56,7 @@ res.status(201).json({ user, token });
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 };
+
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -86,10 +87,10 @@ export const loginController = async (req, res) => {
 };
 
 export const logoutController = async(req,res)=>{
-  try {
-    res.clearCookie("jwt");
-    res.status(200).json({ message: "Logout successful" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  try{
+    localStorage.removeItem("token");
+    res.status(200).json({message:"Logout successful"});
+  }catch(err){
+    res.status(500).json({error:err.message});
   }
 }

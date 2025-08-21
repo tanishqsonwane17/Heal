@@ -2,7 +2,6 @@ import express from 'express';
 import {  loginController, logoutController, registerController } from '../controller/user.controller.js';
 import { body } from 'express-validator';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
-
 const router = express.Router();
 
 router.post( '/register',
@@ -23,6 +22,13 @@ router.get('/home',isAuthenticated,(req,res)=>{
   res.send('home');
   console.log('user is authenticated');
 })
+
+
+router.get("/auth/check", isAuthenticated, (req, res) => {
+  res.json({ success: true, user: req.user });
+});
+
+
 
 export default router;
 
