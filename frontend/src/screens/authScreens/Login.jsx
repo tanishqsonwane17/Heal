@@ -17,18 +17,26 @@ const Login = () => {
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (data) => {
-      const res = await axios.post(`${baseUrl}/user/login`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      return res.data;
-    },
-    onSuccess: (data) => {
-      console.log("Login successful: ", data);
-      navigate("/home");
-    },
-  });
+ const loginMutation = useMutation({
+  mutationFn: async (data) => {
+    const res = await axios.post(`${baseUrl}/user/login`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  },
+  onSuccess: (data) => {
+    console.log("Login successful: ", data);
+
+    // ✅ Token save kar le
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+    }
+
+    // ✅ Phir navigate
+    navigate("/home");
+  },
+});
+
 
   const onSubmit = (data) => {
     loginMutation.mutate({
